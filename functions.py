@@ -5,31 +5,31 @@ char_dict = {    'a': 'a',    'b': 'b',    'c': 'c',    'd': 'd',    'e': 'e',  
 
 keys_dict = {}
 
-# Generar una clave para cada letra y almacenarla en keys_dict
+# Generates keys
 for x in char_dict:
     token_key = secrets.token_bytes(16)
     keys_dict[x] = token_key
 
-# Guardar keys_dict en un archivo
+# Save keys_dict
 with open('keys_dict.pkl', 'wb') as f:
     pickle.dump(keys_dict, f)
 
-# Cargar keys_dict del archivo
+# Load keys_dict 
 with open('keys_dict.pkl', 'rb') as f:
     keys_dict = pickle.load(f)
 
 def encrypt_message(message, keys_dict):
-    encrypted_message = b""  # Inicializa como una cadena de bytes vacía
+    encrypted_message = b""  # Starts a empty bites string
     for char in message:
         if char in keys_dict:
             encrypted_message += keys_dict[char]
         else:
-            encrypted_message += char.encode()  # Si el carácter no está en el diccionario, se deja sin cambios
+            encrypted_message += char.encode()  # If character is not in char_dict, no changes are applied
     return encrypted_message
 
 def decrypt_message(encrypted_message, keys_dict):
     decrypted_message = ""
-    key_length = 16  # Longitud de las claves en bytes
+    key_length = 16  
     for i in range(0, len(encrypted_message), key_length):
         key_segment = encrypted_message[i:i+key_length]
         for char, key in keys_dict.items():
